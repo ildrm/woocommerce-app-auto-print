@@ -1,0 +1,26 @@
+[package]
+name = "autoprint-application"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+autoprint-domain = { path = "../domain" }
+autoprint-security = { path = "../security" }
+autoprint-persistence = { path = "../persistence" }
+autoprint-woocommerce = { path = "../woocommerce" }
+autoprint-template-core = { path = "../template-core" }
+autoprint-document-rendering = { path = "../document-rendering" }
+autoprint-printing-core = { path = "../printing-core" }
+
+[dev-dependencies]
+tempfile.workspace = true

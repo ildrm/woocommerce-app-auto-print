@@ -1,0 +1,16 @@
+CREATE TABLE stores(id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)));
+CREATE TABLE printers(id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)));
+CREATE TABLE templates(id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)));
+CREATE TABLE template_versions(template_id TEXT NOT NULL, version INTEGER NOT NULL CHECK(version>0), data TEXT NOT NULL CHECK(json_valid(data)), PRIMARY KEY(template_id,version));
+CREATE TABLE papers(id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)));
+CREATE TABLE rules(id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)));
+CREATE TABLE settings(id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)));
+CREATE TABLE orders(store_id TEXT NOT NULL REFERENCES stores(id), order_id INTEGER NOT NULL, data TEXT NOT NULL CHECK(json_valid(data)), PRIMARY KEY(store_id,order_id));
+CREATE TABLE checkpoints(store_id TEXT PRIMARY KEY REFERENCES stores(id), watermark TEXT NOT NULL);
+CREATE TABLE jobs(id TEXT PRIMARY KEY, identity TEXT NOT NULL UNIQUE, store_id TEXT NOT NULL, state TEXT NOT NULL CHECK(state IN ('queued','rendering','ready','submitting','submitted','completed','retry_scheduled','failed','outcome_uncertain','canceled')), snapshot TEXT NOT NULL CHECK(json_valid(snapshot)), created_at TEXT NOT NULL, updated_at TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, next_attempt TEXT NOT NULL, error TEXT, submission_ref TEXT);
+CREATE INDEX jobs_ready ON jobs(state,next_attempt);
+CREATE INDEX jobs_store ON jobs(store_id,created_at);
+CREATE TABLE attempts(job_id TEXT NOT NULL REFERENCES jobs(id), number INTEGER NOT NULL, state TEXT NOT NULL, error TEXT, submission_ref TEXT, created_at TEXT NOT NULL, PRIMARY KEY(job_id,number));
+CREATE TABLE webhook_events(id TEXT PRIMARY KEY, store_id TEXT NOT NULL, order_id INTEGER NOT NULL, created_at TEXT NOT NULL);
+CREATE TABLE relay_devices(id TEXT PRIMARY KEY, token_hash TEXT NOT NULL);
+CREATE TABLE relay_events(id TEXT PRIMARY KEY, store_id TEXT NOT NULL, order_id INTEGER NOT NULL, device_id TEXT NOT NULL, claimed_until TEXT, acknowledged INTEGER NOT NULL DEFAULT 0);

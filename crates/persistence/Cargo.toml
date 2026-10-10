@@ -1,0 +1,19 @@
+[package]
+name = "autoprint-persistence"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+uuid.workspace = true
+tokio.workspace = true
+autoprint-domain = { path = "../domain" }
+
+[dev-dependencies]
+autoprint-template-core = { path = "../template-core" }
+tempfile.workspace = true

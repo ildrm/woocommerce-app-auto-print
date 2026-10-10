@@ -1,0 +1,23 @@
+{
+  "name": "woocommerce-autoprint-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "apps/desktop"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/desktop",
+    "build": "npm run build -w apps/desktop",
+    "check": "npm run check -w apps/desktop",
+    "test": "npm run test -w apps/desktop",
+    "lint": "npm run lint -w apps/desktop",
+    "e2e": "node scripts/run-e2e.mjs",
+    "tauri": "npm exec -w apps/desktop -- tauri",
+    "verify": "npm run check && npm run lint && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "prettier": "^3.9.10"
+  }
+}

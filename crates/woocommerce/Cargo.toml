@@ -1,0 +1,18 @@
+[package]
+name = "autoprint-woocommerce"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+reqwest.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+url.workspace = true
+autoprint-domain = { path = "../domain" }
+autoprint-security = { path = "../security" }
+
+[dev-dependencies]
+tempfile.workspace = true

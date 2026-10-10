@@ -1,0 +1,9 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "WooCommerce AutoPrint",
+  "version": "0.1.0",
+  "identifier": "org.autoprint.woocommerce",
+  "build": {"beforeDevCommand":"npm run dev","devUrl":"http://localhost:5173","beforeBuildCommand":"npm run build","frontendDist":"../dist"},
+  "app": {"windows":[{"title":"WooCommerce AutoPrint","width":1380,"height":940,"minWidth":860,"minHeight":620}],"security":{"csp":"default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src ipc: http://ipc.localhost; object-src 'none'; frame-src blob: data:"}},
+  "bundle": {"active":true,"targets":"all","externalBin":["binaries/autoprint-agent","binaries/autoprint-typst"],"resources":{"../../../assets/fonts/":"fonts/"},"icon":["icons/32x32.png","icons/128x128.png","icons/icon.icns","icons/icon.ico"]}
+}

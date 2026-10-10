@@ -1,0 +1,18 @@
+[package]
+name = "autoprint-document-rendering"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+barcoders = { version = "2", default-features = false }
+qrcode = { version = "0.14", default-features = false, features = ["svg"] }
+anyhow.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+autoprint-domain = { path = "../domain" }
+autoprint-template-core = { path = "../template-core" }
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,19 @@
+[package]
+name = "autoprint-agent"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+directories = "6"
+autoprint-document-rendering = { path = "../../crates/document-rendering" }
+anyhow.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+fs2.workspace = true
+serde_json.workspace = true
+axum.workspace = true
+autoprint-application = { path = "../../crates/application" }
+autoprint-security = { path = "../../crates/security" }
+autoprint-persistence = { path = "../../crates/persistence" }
