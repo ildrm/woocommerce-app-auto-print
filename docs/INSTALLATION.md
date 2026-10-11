@@ -1,6 +1,6 @@
 # Installation and startup
 
-Build prerequisites and commands are in README.md. The macOS arm64 review .app/DMG are generated under target/release/bundle. They are unsigned and unnotarized; production signing is not claimed. Windows/Linux packaging configurations exist, but installers have not been built or verified on those platforms.
+Build prerequisites and platform commands are in [BUILDING.md](BUILDING.md). The macOS arm64 .app/DMG, Debian arm64 .deb, Fedora arm64 .rpm, and Windows x64 NSIS installer are collected under `artifacts/`. These are unsigned review builds; macOS notarization and native Windows/Linux GUI and physical printer acceptance remain pending. See [build evidence](BUILD_REPORT.md).
 
 Core runtime includes the independent agent, Typst and licensed Noto fonts. Tauri packages target-named sidecars with resources. Windows printing additionally needs a verified SumatraPDF helper and its applicable license/source distribution. There is no mandatory proprietary hosted runtime.
 

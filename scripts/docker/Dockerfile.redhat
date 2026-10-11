@@ -1,0 +1,12 @@
+FROM node:24-bookworm AS node
+FROM rust:1.99-bookworm AS rust
+FROM fedora:43
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+COPY --from=rust /usr/local/cargo /usr/local/cargo
+COPY --from=rust /usr/local/rustup /usr/local/rustup
+ENV CARGO_HOME=/usr/local/cargo RUSTUP_HOME=/usr/local/rustup PATH=/usr/local/cargo/bin:/usr/local/bin:/usr/bin:/bin CARGO_BUILD_JOBS=2 CARGO_HTTP_MULTIPLEXING=false
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+COPY scripts/install-linux-deps.sh /tmp/install-linux-deps.sh
+RUN sh /tmp/install-linux-deps.sh redhat && dnf clean all
+WORKDIR /workspace

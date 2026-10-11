@@ -1,0 +1,15 @@
+# Build the Debian arm64 toolchain image first; its layers are reused here.
+FROM autoprint-build-debian:arm64
+RUN apt-get update && apt-get install -y --no-install-recommends clang lld llvm nsis unzip \
+    && rm -rf /var/lib/apt/lists/*
+RUN curl --proto '=https' --tlsv1.2 -fL --connect-timeout 15 --max-time 180 \
+      https://github.com/rust-cross/cargo-xwin/releases/download/v0.23.1/cargo-xwin-v0.23.1.aarch64-unknown-linux-musl.tar.gz -o /tmp/cargo-xwin.tar.gz \
+    && echo 'dc0a0fb28fdd90405f69e7365bce91d2504ea7491eb4d79d5655ffa106358925  /tmp/cargo-xwin.tar.gz' | sha256sum -c - \
+    && tar -xzf /tmp/cargo-xwin.tar.gz -C /usr/local/bin && rm /tmp/cargo-xwin.tar.gz
+ARG RUSTUP_DIST_SERVER=https://static.rust-lang.org
+RUN rustup target add x86_64-pc-windows-msvc
+RUN curl --proto '=https' --tlsv1.2 -fL --connect-timeout 15 --max-time 60 \
+      https://raw.githubusercontent.com/kichik/nsis/v311/Include/Win/RestartManager.nsh \
+      -o /usr/share/nsis/Include/Win/RestartManager.nsh \
+    && echo '67149978412da9b283e2e1abe48a360093df9caf6363373e2cabe463978b7c0e  /usr/share/nsis/Include/Win/RestartManager.nsh' | sha256sum -c -
+ENV XWIN_CACHE_DIR=/workspace/.tools/xwin XWIN_ACCEPT_LICENSE=1 CARGO_BUILD_JOBS=2

@@ -1,6 +1,6 @@
 # Release process
 
-`scripts/prepare-bundle.mjs` builds optimized engine/relay binaries, copies host-target sidecars and verifies runtime presence. `scripts/build-macos.sh` then builds app+DMG without signing for local review. Production distribution must use provisioned signing/notarization credentials and independently satisfy all release gates.
+`scripts/prepare-bundle.mjs` builds locked, optimized engine/relay binaries and prepares target sidecars/icons. Platform shell/batch scripts then build macOS app/DMG, Debian .deb, Fedora/Red Hat family .rpm, or Windows NSIS/MSI packages and collect checksums under `artifacts/`. Windows NSIS cross-compilation is available from an isolated Linux container. See [building](BUILDING.md) and [recorded build evidence](BUILD_REPORT.md). Production distribution must use provisioned signing/notarization credentials and independently satisfy all release gates.
 
 Checklist:
 
@@ -10,7 +10,8 @@ Checklist:
 - [x] Frontend advisory audit reports zero known vulnerabilities
 - [ ] Rust advisory/full dependency-license audit complete
 - [ ] All mandatory product requirements complete
-- [ ] Windows/Linux installers built and tested
+- [x] Linux arm64 .deb/.rpm and Windows x64 NSIS installers built and payloads inspected
+- [ ] Native Windows/Linux GUI and physical printer acceptance completed
 - [ ] Physical device matrix verified
 - [ ] All translations and typography baselines reviewed
 - [ ] Signed/notarized installers and signed update infrastructure

@@ -55,13 +55,13 @@ Printer transports require device-specific verification. **Submitted** records t
 
 ## Platform and release status
 
-| Platform    | Current evidence                                                                                                                                                                        |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| macOS arm64 | Native application launched; authenticated agent communication and background PDF generation verified. An unsigned, unnotarized `.app` and DMG were built.                              |
-| Windows     | Platform adapters and packaging configuration are present. Native builds and installers remain unverified. OS PDF printing additionally requires a packager-supplied SumatraPDF helper. |
-| Linux       | Platform adapters and packaging configuration are present. Native builds and installers remain unverified.                                                                              |
+| Platform    | Current evidence                                                                                                                                                                                            |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| macOS arm64 | Native application launched; authenticated agent communication and background PDF generation verified. An unsigned, unnotarized `.app` and DMG were built.                                                  |
+| Windows x64 | Full application cross-compiled and unsigned NSIS installer generated; executable payload and fonts inspected. Native Windows runtime validation remains pending. The pinned SumatraPDF helper is included. |
+| Linux arm64 | Debian 12 `.deb` and Fedora 43 `.rpm` built; package contents and native engine startup verified. Desktop GUI and physical printer validation remain pending.                                               |
 
-Build outputs are generated locally under `target/`; they are not checked-in release downloads. Signing, distribution, updates, and the remaining acceptance gates are tracked in the [release process](docs/RELEASE_PROCESS.md).
+Build outputs are generated locally under `target/` and collected under `artifacts/`; they are not checked-in release downloads. See the [2026-10-11 build report](docs/BUILD_REPORT.md). Signing, distribution, updates, and the remaining acceptance gates are tracked in the [release process](docs/RELEASE_PROCESS.md).
 
 ## Quick start
 
@@ -184,7 +184,28 @@ Browser tests use a disposable database and a local server on port `5183`. Suppl
 
 See the [test strategy](docs/TEST_STRATEGY.md) and [hardware compatibility plan](docs/HARDWARE_COMPATIBILITY.md).
 
-## Build the macOS review package
+## Build installers
+
+Platform scripts now prepare dependencies, compile the Rust engine/relay, and
+package the native desktop application. See [building instructions](docs/BUILDING.md)
+for prerequisites, Windows helper configuration, Linux containers, and output locations.
+
+```sh
+sh scripts/build-macos.sh
+sh scripts/build-debian.sh       # Debian/Ubuntu host
+sh scripts/build-redhat.sh       # Fedora/compatible Red Hat family host
+```
+
+On Windows, run `scripts\build-windows.bat` after setting `AUTOPRINT_SUMATRA`.
+Linux builds can also run from this Mac using
+`sh scripts/build-linux-container.sh debian arm64` or
+`sh scripts/build-linux-container.sh redhat arm64`.
+An experimental Windows x64 NSIS cross-build is available with
+`sh scripts/build-windows-container.sh`; MSI generation requires Windows.
+Collected packages and SHA-256 checksums are written to `artifacts/`.
+Android is outside the current build scope.
+
+### macOS review package
 
 After installing dependencies and fetching the runtime and fonts, run on macOS arm64:
 
@@ -196,7 +217,7 @@ The script prepares sidecars, builds the native application, and creates and ver
 
 ```text
 target/release/bundle/macos/WooCommerce AutoPrint.app
-target/release/bundle/dmg/WooCommerce AutoPrint_0.1.0_aarch64.dmg
+target/release/bundle/dmg/WooCommerce AutoPrint_0.1.0_arm64.dmg
 ```
 
 These are unsigned, unnotarized review artifacts. See [installation and user-level startup](docs/INSTALLATION.md) and the [release process](docs/RELEASE_PROCESS.md) before packaging for distribution.
